@@ -77,7 +77,7 @@ tag_values.append('PAD')
 tag_values.append('X')
 tag2idx = {t: i for i, t in enumerate(tag_values)}
 #tag2idx["X"] = -100.0
-# print(tag2idx) just for check
+print(tag2idx) #just for check
 """
 subword-based tokenization which is a solution between word and character-based tokenization. 
 The main idea is to solve the issues faced by word-based tokenization (very large vocabulary size, 
@@ -242,7 +242,6 @@ epochs = 4
 max_grad_norm = 1.0
 
 
-# TO change the learning rate 
 total_steps = len(train_dataloader) * epochs
 
 scheduler = get_linear_schedule_with_warmup(
@@ -282,7 +281,6 @@ for _ in trange(epochs, desc='Epoch'):
 
         total_loss += loss.item()
 
-        # clip_grad_norm_ помогает против взрыва градиентов
         torch.nn.utils.clip_grad_norm_(parameters=model.parameters(), max_norm=max_grad_norm)
 
         optimizer.step()
@@ -293,7 +291,6 @@ for _ in trange(epochs, desc='Epoch'):
 
     loss_values.append(avg_train_loss)
 
-    # Валидация
     model.eval()
     eval_loss, eval_accuracy = 0, 0
     nb_eval_steps, nb_eval_examples = 0, 0
@@ -387,7 +384,6 @@ with torch.no_grad():
     output = model(input_ids)
 label_indices = np.argmax(output[0].to('cpu').numpy(), axis=2)
 
-# объединяем токены и метки
 tokens = tokenizer.convert_ids_to_tokens(input_ids.to('cpu').numpy()[0])
 new_tokens, new_labels = [], []
 for token, label_idx in zip(tokens, label_indices[0]):
